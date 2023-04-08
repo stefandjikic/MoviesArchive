@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {getPopularMovies, getUpcomingMovies, imagePath} from '../services/api';
 import {IMovie} from '../types/interfaces';
 import Slider from '../components/Slider';
@@ -33,12 +33,14 @@ const Home = () => {
 
   return (
     <>
-      <View style={styles.slider}>
-        <Slider images={moviesImages} />
-      </View>
-      <View style={styles.carousel}>
-        <MoviesList movies={popularMovies} title="Popular Movies" />
-      </View>
+      <ScrollView>
+        <View style={styles.slider}>
+          <Slider images={moviesImages} />
+        </View>
+        <View style={styles.carousel}>
+          <MoviesList movies={popularMovies} title="Popular Movies" />
+        </View>
+      </ScrollView>
     </>
   );
 };
