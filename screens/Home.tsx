@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, ScrollView, ActivityIndicator} from 'react-native';
 import {
   getDocumentaries,
   getFantasyMovies,
@@ -18,6 +18,7 @@ const Home = () => {
   const [documentaries, setDocumentaries] = useState<IMovie[]>([]);
   const [popularTvShows, setPopularTvShows] = useState<IMovie[]>([]);
   const [moviesImages, setMoviesImages] = useState<Array<string>>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   console.log(error, 'error from home');
 
@@ -42,41 +43,48 @@ const Home = () => {
         setPopularTvShows(tv);
         setFantasyMovies(fantasy);
         setDocumentaries(document);
+        setIsLoading(false);
       })
       .catch(err => {
         setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   return (
     <>
-      <ScrollView>
-        {moviesImages && (
-          <View style={styles.slider}>
-            <Slider images={moviesImages} />
-          </View>
-        )}
-        {popularMovies && (
-          <View style={styles.carousel}>
-            <MoviesList movies={popularMovies} title="Popular Movies" />
-          </View>
-        )}
-        {popularTvShows && (
-          <View style={styles.carousel}>
-            <MoviesList movies={popularTvShows} title="Popular Tv Shows" />
-          </View>
-        )}
-        {fantasyMovies && (
-          <View style={styles.carousel}>
-            <MoviesList movies={fantasyMovies} title="Fantasy Movies" />
-          </View>
-        )}
-        {documentaries && (
-          <View style={styles.carousel}>
-            <MoviesList movies={documentaries} title="Documentaries" />
-          </View>
-        )}
-      </ScrollView>
+      {!isLoading && (
+        <ScrollView>
+          {moviesImages && (
+            <View style={styles.slider}>
+              <Slider images={moviesImages} />
+            </View>
+          )}
+          {popularMovies && (
+            <View style={styles.carousel}>
+              <MoviesList movies={popularMovies} title="Popular Movies" />
+            </View>
+          )}
+          {popularTvShows && (
+            <View style={styles.carousel}>
+              <MoviesList movies={popularTvShows} title="Popular Tv Shows" />
+            </View>
+          )}
+          {fantasyMovies && (
+            <View style={styles.carousel}>
+              <MoviesList movies={fantasyMovies} title="Fantasy Movies" />
+            </View>
+          )}
+          {documentaries && (
+            <View style={styles.carousel}>
+              <MoviesList movies={documentaries} title="Documentaries" />
+            </View>
+          )}
+        </ScrollView>
+      )}
+      {isLoading && <ActivityIndicator size="large" />}
     </>
   );
 };
