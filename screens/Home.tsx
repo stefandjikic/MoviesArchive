@@ -11,6 +11,7 @@ import {
 import {IMovie} from '../types/interfaces';
 import Slider from '../components/Slider';
 import MoviesList from '../components/MoviesList';
+import ErrorComponent from '../components/ErrorComponent';
 
 const Home = () => {
   const [popularMovies, setPopularMovies] = useState<IMovie[]>([]);
@@ -19,7 +20,7 @@ const Home = () => {
   const [popularTvShows, setPopularTvShows] = useState<IMovie[]>([]);
   const [moviesImages, setMoviesImages] = useState<Array<string>>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   console.log(error, 'error from home');
 
   const getMovieData = () => {
@@ -55,7 +56,7 @@ const Home = () => {
 
   return (
     <>
-      {!isLoading && (
+      {!isLoading && error === '' && (
         <ScrollView>
           {moviesImages && (
             <View style={styles.slider}>
@@ -85,6 +86,7 @@ const Home = () => {
         </ScrollView>
       )}
       {isLoading && <ActivityIndicator size="large" />}
+      {error !== '' && <ErrorComponent errorText="Something went wrong" />}
     </>
   );
 };
