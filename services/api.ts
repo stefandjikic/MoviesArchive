@@ -15,7 +15,21 @@ export const getUpcomingMovies = async () => {
   return resp.data.results;
 };
 
-export const getPopularTv = async () => {
+export const getPopularTvShows = async () => {
   const resp = await axios.get(`${apiUrl}/tv/popular?${apiKey}`);
+  return resp.data.results;
+};
+
+export const getFantasyMovies = async () => {
+  const resp = await axios.get(
+    `${apiUrl}/discover/movie?${apiKey}&with_genres=14 `,
+  );
+  return resp.data.results;
+};
+
+export const getDocumentaries = async () => {
+  const resp = await axios.get(
+    `${apiUrl}/discover/movie?${apiKey}&with_genres=99`,
+  );
   return resp.data.results;
 };
