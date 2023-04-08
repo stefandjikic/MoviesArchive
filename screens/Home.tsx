@@ -21,44 +21,27 @@ const Home = () => {
   const [error, setError] = useState(false);
   console.log(error, 'error from home');
 
+  const getMovieData = () => {
+    return Promise.all([
+      getUpcomingMovies(),
+      getPopularMovies(),
+      getPopularTvShows(),
+      getFantasyMovies(),
+      getDocumentaries(),
+    ]);
+  };
+
   useEffect(() => {
-    getUpcomingMovies()
-      .then((mov: IMovie[]) => {
-        const images = mov.map(m => `${imagePath}${m.poster_path}`);
-        console.log(images, 'images');
+    getMovieData()
+      .then(([upcoming, popular, tv, fantasy, document]) => {
+        const images = upcoming.map(
+          (m: IMovie) => `${imagePath}${m.poster_path}`,
+        );
         setMoviesImages(images);
-      })
-      .catch(err => {
-        setError(err);
-      });
-
-    getPopularMovies()
-      .then(mov => {
-        setPopularMovies(mov);
-      })
-      .catch(err => {
-        setError(err);
-      });
-
-    getPopularTvShows()
-      .then(show => {
-        setPopularTvShows(show);
-      })
-      .catch(err => {
-        setError(err);
-      });
-
-    getFantasyMovies()
-      .then(mov => {
-        setFantasyMovies(mov);
-      })
-      .catch(err => {
-        setError(err);
-      });
-
-    getDocumentaries()
-      .then(mov => {
-        setDocumentaries(mov);
+        setPopularMovies(popular);
+        setPopularTvShows(tv);
+        setFantasyMovies(fantasy);
+        setDocumentaries(document);
       })
       .catch(err => {
         setError(err);
@@ -68,21 +51,31 @@ const Home = () => {
   return (
     <>
       <ScrollView>
-        <View style={styles.slider}>
-          <Slider images={moviesImages} />
-        </View>
-        <View style={styles.carousel}>
-          <MoviesList movies={popularMovies} title="Popular Movies" />
-        </View>
-        <View style={styles.carousel}>
-          <MoviesList movies={popularTvShows} title="Popular Tv Shows" />
-        </View>
-        <View style={styles.carousel}>
-          <MoviesList movies={fantasyMovies} title="Fantasy Movies" />
-        </View>
-        <View style={styles.carousel}>
-          <MoviesList movies={documentaries} title="Documentaries" />
-        </View>
+        {moviesImages && (
+          <View style={styles.slider}>
+            <Slider images={moviesImages} />
+          </View>
+        )}
+        {popularMovies && (
+          <View style={styles.carousel}>
+            <MoviesList movies={popularMovies} title="Popular Movies" />
+          </View>
+        )}
+        {popularTvShows && (
+          <View style={styles.carousel}>
+            <MoviesList movies={popularTvShows} title="Popular Tv Shows" />
+          </View>
+        )}
+        {fantasyMovies && (
+          <View style={styles.carousel}>
+            <MoviesList movies={fantasyMovies} title="Fantasy Movies" />
+          </View>
+        )}
+        {documentaries && (
+          <View style={styles.carousel}>
+            <MoviesList movies={documentaries} title="Documentaries" />
+          </View>
+        )}
       </ScrollView>
     </>
   );
