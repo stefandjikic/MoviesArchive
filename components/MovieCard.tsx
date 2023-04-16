@@ -1,16 +1,22 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, Image} from 'react-native';
+import {NavigationProp} from '@react-navigation/native';
 import {IMovie} from '../types/interfaces';
 import {imagePath} from '../services/api';
 const placeHolderImage = require('../assets/images/movie_poster.png');
 
 interface IProps {
   movie: IMovie;
+  navigation: NavigationProp<any, any>;
 }
 
-const MovieCard = ({movie}: IProps) => {
+const MovieCard = ({movie, navigation}: IProps) => {
+  const onPress = () => {
+    navigation.navigate('Details', {movieID: movie.id});
+  };
+
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
       <Image
         source={
           movie.poster_path

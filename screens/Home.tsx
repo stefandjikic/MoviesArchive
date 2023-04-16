@@ -12,8 +12,13 @@ import {IMovie} from '../types/interfaces';
 import Slider from '../components/Slider';
 import MoviesList from '../components/MoviesList';
 import ErrorComponent from '../components/ErrorComponent';
+import {NavigationProp} from '@react-navigation/native';
 
-const Home = () => {
+interface IRouterProps {
+  navigation: NavigationProp<any, any>;
+}
+
+const Home = ({navigation}: IRouterProps) => {
   const [popularMovies, setPopularMovies] = useState<IMovie[]>([]);
   const [fantasyMovies, setFantasyMovies] = useState<IMovie[]>([]);
   const [documentaries, setDocumentaries] = useState<IMovie[]>([]);
@@ -65,22 +70,38 @@ const Home = () => {
           )}
           {popularMovies && (
             <View style={styles.carousel}>
-              <MoviesList movies={popularMovies} title="Popular Movies" />
+              <MoviesList
+                navigation={navigation}
+                movies={popularMovies}
+                title="Popular Movies"
+              />
             </View>
           )}
           {popularTvShows && (
             <View style={styles.carousel}>
-              <MoviesList movies={popularTvShows} title="Popular Tv Shows" />
+              <MoviesList
+                navigation={navigation}
+                movies={popularTvShows}
+                title="Popular Tv Shows"
+              />
             </View>
           )}
           {fantasyMovies && (
             <View style={styles.carousel}>
-              <MoviesList movies={fantasyMovies} title="Fantasy Movies" />
+              <MoviesList
+                navigation={navigation}
+                movies={fantasyMovies}
+                title="Fantasy Movies"
+              />
             </View>
           )}
           {documentaries && (
             <View style={styles.carousel}>
-              <MoviesList movies={documentaries} title="Documentaries" />
+              <MoviesList
+                navigation={navigation}
+                movies={documentaries}
+                title="Documentaries"
+              />
             </View>
           )}
         </ScrollView>
