@@ -14,3 +14,9 @@ export interface IMovie {
   backdrop_path: string;
   genre_ids: Array<number>;
 }
+
+export interface IMovieDetails extends IMovie {
+  belongs_to_collection?: null | object;
+  genres: Array<{id: number; name: string}>;
+  budget: number;
+}
