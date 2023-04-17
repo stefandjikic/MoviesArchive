@@ -8,12 +8,12 @@ import {
   ActivityIndicator,
   View,
   Modal,
-  Pressable,
 } from 'react-native';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {IMovieDetails} from '../types/interfaces';
 import {getMovieDetails, imagePath} from '../services/api';
 import PlayButton from '../components/PlayButton';
+import VideoComponent from '../components/VideoComponent';
 
 const placeHolderImage = require('../assets/images/movie_poster.png');
 const height = Dimensions.get('window').height;
@@ -98,12 +98,11 @@ const Details = ({route, navigation}: IProps) => {
           </ScrollView>
           <Modal
             animationType="slide"
+            supportedOrientations={['portrait', 'landscape']}
             // transparent={true}
             visible={modalVisible}>
             <View style={styles.videoModal}>
-              <Pressable onPress={() => setModalVisible(false)}>
-                <Text>Close</Text>
-              </Pressable>
+              <VideoComponent setModalVisible={setModalVisible} />
             </View>
           </Modal>
         </View>
