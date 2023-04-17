@@ -74,6 +74,13 @@ const Details = ({route, navigation}: IProps) => {
                 ))}
               </View>
             )}
+            <Text style={styles.rating}>
+              {details?.vote_average.toFixed()}/10
+            </Text>
+            <Text style={styles.overview}>{details.overview || 'No data'}</Text>
+            <Text style={styles.releseDate}>
+              {'Relese date: ' + new Date(details?.release_date).toDateString()}
+            </Text>
           </View>
         </ScrollView>
       )}
@@ -121,5 +128,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#e6e6e6',
     padding: 5,
     marginRight: 5,
+  },
+  rating: {
+    fontWeight: 'bold',
+    // marginBottom: 8,
+    marginTop: 10,
+    color: '#ff8c00',
+  },
+  overview: {
+    padding: 8,
+  },
+  releseDate: {
+    fontWeight: 'bold',
   },
 });
