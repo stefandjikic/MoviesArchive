@@ -7,10 +7,13 @@ import {
   Dimensions,
   ActivityIndicator,
   View,
+  Modal,
+  Pressable,
 } from 'react-native';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {IMovieDetails} from '../types/interfaces';
 import {getMovieDetails, imagePath} from '../services/api';
+import PlayButton from '../components/PlayButton';
 
 const placeHolderImage = require('../assets/images/movie_poster.png');
 const height = Dimensions.get('window').height;
@@ -26,6 +29,7 @@ const Details = ({route, navigation}: IProps) => {
   const {movieID} = route.params as {movieID: number};
   const [details, setDetails] = useState<IMovieDetails>({} as IMovieDetails);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     getMovieDetails(movieID)
@@ -44,45 +48,65 @@ const Details = ({route, navigation}: IProps) => {
   return (
     <>
       {isLoaded && (
-        <ScrollView>
-          <View style={styles.imageContainer}>
-            <Image
-              source={
-                details?.poster_path
-                  ? {
-                      uri: `${imagePath}${details.poster_path}`,
-                    }
-                  : placeHolderImage
-              }
-              resizeMode="cover"
-              style={styles.image}
-            />
-            {!details?.poster_path && (
-              <Text style={styles.movieTitleAbsolute}>
+        <View>
+          <ScrollView>
+            <View style={styles.imageContainer}>
+              <Image
+                source={
+                  details?.poster_path
+                    ? {
+                        uri: `${imagePath}${details.poster_path}`,
+                      }
+                    : placeHolderImage
+                }
+                resizeMode="cover"
+                style={styles.image}
+              />
+              {!details?.poster_path && (
+                <Text style={styles.movieTitleAbsolute}>
+                  {details.title || 'No data'}
+                </Text>
+              )}
+            </View>
+            <View style={styles.container}>
+              <View style={styles.playButton}>
+                <PlayButton setModalVisible={setModalVisible} />
+              </View>
+              <Text style={styles.movieTitle}>
                 {details.title || 'No data'}
               </Text>
-            )}
-          </View>
-          <View style={styles.container}>
-            <Text style={styles.movieTitle}>{details.title || 'No data'}</Text>
-            {details?.genres && (
-              <View style={styles.genresContainer}>
-                {details?.genres?.map(genre => (
-                  <Text style={styles.genre} key={genre.id}>
-                    {genre.name}
-                  </Text>
-                ))}
-              </View>
-            )}
-            <Text style={styles.rating}>
-              {details?.vote_average.toFixed()}/10
-            </Text>
-            <Text style={styles.overview}>{details.overview || 'No data'}</Text>
-            <Text style={styles.releseDate}>
-              {'Relese date: ' + new Date(details?.release_date).toDateString()}
-            </Text>
-          </View>
-        </ScrollView>
+              {details?.genres && (
+                <View style={styles.genresContainer}>
+                  {details?.genres?.map(genre => (
+                    <Text style={styles.genre} key={genre.id}>
+                      {genre.name}
+                    </Text>
+                  ))}
+                </View>
+              )}
+              <Text style={styles.rating}>
+                {details?.vote_average?.toFixed()}/10
+              </Text>
+              <Text style={styles.overview}>
+                {details?.overview || 'No data'}
+              </Text>
+              <Text style={styles.releseDate}>
+                {'Relese date: ' +
+                  new Date(details?.release_date).toDateString()}
+              </Text>
+            </View>
+          </ScrollView>
+          <Modal
+            animationType="slide"
+            // transparent={true}
+            visible={modalVisible}>
+            <View style={styles.videoModal}>
+              <Pressable onPress={() => setModalVisible(false)}>
+                <Text>Close</Text>
+              </Pressable>
+            </View>
+          </Modal>
+        </View>
       )}
       {!isLoaded && <ActivityIndicator size="large" />}
     </>
@@ -113,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   movieTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
@@ -140,5 +164,15 @@ const styles = StyleSheet.create({
   },
   releseDate: {
     fontWeight: 'bold',
+  },
+  playButton: {
+    position: 'absolute',
+    top: -20,
+    right: 6,
+  },
+  videoModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
