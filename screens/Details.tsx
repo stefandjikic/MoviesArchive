@@ -84,16 +84,20 @@ const Details = ({route, navigation}: IProps) => {
                   ))}
                 </View>
               )}
-              <Text style={styles.rating}>
-                {details?.vote_average?.toFixed()}/10
-              </Text>
+              {details?.vote_average && (
+                <Text style={styles.rating}>
+                  {details?.vote_average?.toFixed()}/10
+                </Text>
+              )}
               <Text style={styles.overview}>
                 {details?.overview || 'No data'}
               </Text>
-              <Text style={styles.releseDate}>
-                {'Relese date: ' +
-                  new Date(details?.release_date).toDateString()}
-              </Text>
+              {details?.release_date && (
+                <Text style={styles.releseDate}>
+                  {'Relese date: ' +
+                    new Date(details?.release_date).toDateString()}
+                </Text>
+              )}
             </View>
           </ScrollView>
           <Modal
